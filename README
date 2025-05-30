@@ -1,0 +1,10 @@
+This project had two go packages. One contains the business logic, the other is the cli implementation.
+
+## TODO notes
+
+- json encoding
+- json decoding
+- methods
+- pointers
+- writing to file
+- Reading from file
