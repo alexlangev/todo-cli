@@ -9,54 +9,54 @@ import (
 	"time"
 )
 
-// non-exported type (lowercase)
 type item struct {
-	task        string
-	done        bool
-	createdat   time.time
-	completedat time.time
+	Task        string
+	Done        bool
+	CreatedAt   time.Time
+	CompletedAt time.Time
 }
 
-// exported type (visible outside package) (uppercase)
-type list []item
+type List []item
 
-func (l *list) Add(task string)	{ // receiver using a pointer since we want the method to modify the content of the receiver
-	t := item {
-		task: task,
-		done: false,
-		createdat: time.now(),
-		completedat: time.time{},
+func (l *List) Add(task string) { // receiver using a pointer since we want the method to modify the content of the receiver
+	t := item{
+		Task:        task,
+		Done:        false,
+		CreatedAt:   time.Now(),
+		CompletedAt: time.Time{},
 	}
 
 	*l = append(*l, t) // dereferencing the pointer to access the underlying slice.
 }
 
-func (l *list) Complete(i int) error {
+func (l *List) Complete(i int) error {
 	ls := *l
 
 	if i <= 0 || i > len(ls) {
-		return fmt.errorf("item %d does not exist", i)
+		return fmt.Errorf("item %d does not exist", i)
 	}
 
-	ls[i-1].done = true
-	ls[i-1].completedat = time.now()
+	ls[i-1].Done = true
+	ls[i-1].CompletedAt = time.Now()
 
 	return nil
 }
 
-func (l *list) Delete(i int) error {
+func (l *List) Delete(i int) error {
 	ls := *l
 
 	if i <= 0 || i > len(ls) {
-		return fmt.errorf("item does not exist", i)
+		return fmt.Errorf("item %d does not exist", i)
 	}
 
 	*l = append(ls[:i-1], ls[i:]...)
+
+	return nil
 }
 
 func (l *List) Save(filename string) error {
-	js, err := json.Marshall(l)
-	
+	js, err := json.Marshal(l)
+
 	if err != nil {
 		return err
 	}
@@ -64,19 +64,19 @@ func (l *List) Save(filename string) error {
 	return ioutil.WriteFile(filename, js, 0644)
 }
 
-func (l *list) Get(filename string) error {
+func (l *List) Get(filename string) error {
 	file, err := ioutil.ReadFile(filename)
 
-	if err !nil {
+	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
 		}
 		return err
 	}
 
-	if len(file) = 0 {
+	if len(file) == 0 {
 		return nil
 	}
 
-	return json.Usmarshal(file, l)
+	return json.Unmarshal(file, l)
 }
