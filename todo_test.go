@@ -42,7 +42,7 @@ func TestComplete(t *testing.T) {
 func TestDelete(t *testing.T) {
 	l := todo.List{}
 
-	tasks := []string {
+	tasks := []string{
 		"New Task 1",
 		"New Task 2",
 		"New Task 3",
@@ -78,7 +78,7 @@ func TestSaveGet(t *testing.T) {
 		t.Errorf("Expected %q, got %q instead.", taskName, l1[0].Task)
 	}
 
-	tf, err := ioutil.TempFile("","")
+	tf, err := ioutil.TempFile("", "")
 
 	if err != nil {
 		t.Fatalf("Error creating temp file: %s", err)
